@@ -2,10 +2,12 @@
  * This file contains all the types and interfaces used in the project.
  */
 
+// Define the configuration for the WhatsApp API
 interface WhatsAppConfig {
   phoneNumberId: string;
   accessToken: string;
   apiVersion?: string; // Optional, defaults to 'v17.0'
+  apiURL?: string; // Optional, defaults to 'https://graph.facebook.com'
 }
 
 
@@ -23,6 +25,7 @@ interface TextMessageOptions extends BaseMessageOptions {
 
 interface MediaMessageOptions extends BaseMessageOptions {
   mediaUrl: string;
+  caption?: string;
 }
 
 interface LocationMessageOptions extends BaseMessageOptions {

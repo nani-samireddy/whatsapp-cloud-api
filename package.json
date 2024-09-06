@@ -1,12 +1,18 @@
 {
   "name": "whatsapp-cloud-api",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc"
-  },  
-  "keywords": [],
-  "author": "",
+  },
+  "keywords": [
+    "whatsapp",
+    "cloud",
+    "api",
+    "whatsapp cloud api",
+    "messaging"
+  ],
+  "author": "nani-samireddy",
   "license": "ISC",
   "description": "",
   "dependencies": {

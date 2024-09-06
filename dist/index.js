@@ -37,9 +37,15 @@ const axios_1 = __importStar(require("axios"));
 class WhatsAppClient {
     // Private constructor to prevent direct instantiation
     constructor(config) {
-        this.config = Object.assign(Object.assign({}, config), { apiVersion: config.apiVersion || "v17.0" });
+        this.config = Object.assign(Object.assign({}, config), { apiVersion: config.apiVersion || "v20.0", apiURL: config.apiURL || "https://graph.facebook.com" });
     }
-    // Static method to get or create the instance
+    /**
+     * Returns an instance of the WhatsAppClient class.
+     *
+     * @param config - Optional configuration object for the WhatsAppClient instance.
+     * @returns An instance of the WhatsAppClient class.
+     * @throws Error if initial configuration is not provided.
+     */
     static getInstance(config) {
         if (!WhatsAppClient.instance) {
             if (!config) {
@@ -53,25 +59,37 @@ class WhatsAppClient {
     setConfig(config) {
         this.config = Object.assign(Object.assign({}, this.config), config);
     }
-    // Private method to send a payload
+    /**
+     * Sends a payload to the WhatsApp API and returns the response.
+     *
+     * @param payload - The payload to send to the WhatsApp API.
+     * @returns The response from the WhatsApp API.
+     * @throws Error if the request fails or the response is not successful.
+     */
     sendPayload(payload) {
         return __awaiter(this, void 0, void 0, function* () {
+            // Extract the required parameters from the payload or config.
             const phoneNumberId = payload.phoneNumberId || this.config.phoneNumberId;
             const accessToken = payload.accessToken || this.config.accessToken;
-            const apiVersion = this.config.apiVersion || "v17.0"; // Use the API version from config or default
+            const apiVersion = this.config.apiVersion || "v20.0"; // Use the API version from config or default
+            const apiURL = this.config.apiURL || "https://graph.facebook.com"; // Use the API URL from config or default
+            // Check if phoneNumberId and accessToken are provided in the payload or config (or throw an error).
             if (!phoneNumberId || !accessToken) {
                 throw new Error("Missing phoneNumberId or accessToken");
             }
             try {
-                const response = yield axios_1.default.post(`https://graph.facebook.com/${apiVersion}/${phoneNumberId}/messages`, payload, {
+                // Send the payload to the WhatsApp API using Axios.
+                const response = yield axios_1.default.post(`${apiURL}/${apiVersion}/${phoneNumberId}/messages`, payload, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                         "Content-Type": "application/json",
                     },
                 });
+                // Return the response data.
                 return response.data;
             }
             catch (error) {
+                // Handle errors from the API response or Axios request.
                 if (error instanceof axios_1.AxiosError) {
                     const errorMessage = error.response
                         ? `Failed to send message: ${error.response.status} - ${error.response.statusText}. Details: ${JSON.stringify(error.response.data)}`
@@ -84,7 +102,13 @@ class WhatsAppClient {
             }
         });
     }
-    // Method to send a text message
+    /**
+     * Sends a text message using WhatsApp.
+     *
+     * @param options - The options for the text message.
+     * @returns A promise that resolves to a WhatsAppMessageResponse.
+     * @throws Error if the request fails or the response is not successful.
+     */
     sendText(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
@@ -98,7 +122,13 @@ class WhatsAppClient {
             return this.sendPayload(payload);
         });
     }
-    // Method to send an image
+    /**
+     * Sends an image message using WhatsApp.
+     *
+     * @param options - The options for the image message.
+     * @returns A promise that resolves to a WhatsAppMessageResponse.
+     * @throws Error if the request fails or the response is not successful.
+     */
     sendImage(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
@@ -112,21 +142,36 @@ class WhatsAppClient {
             return this.sendPayload(payload);
         });
     }
-    // Method to send a video
+    /**
+     * Sends a video message using WhatsApp.
+     *
+     * @param options - The options for the video message.
+     * @returns A promise that resolves to a WhatsAppMessageResponse.
+     * @throws Error if the request fails or the response is not successful.
+     */
     sendVideo(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
                 messaging_product: "whatsapp",
                 to: options.to,
                 type: "video",
-                video: { link: options.mediaUrl },
+                video: {
+                    link: options.mediaUrl,
+                    caption: "video caption",
+                },
                 phoneNumberId: options.phoneNumberId || this.config.phoneNumberId,
                 accessToken: options.accessToken || this.config.accessToken,
             };
             return this.sendPayload(payload);
         });
     }
-    // Method to send a document
+    /**
+     * Sends a document message using WhatsApp.
+     *
+     * @param options - The options for the document message.
+     * @returns A promise that resolves to a WhatsAppMessageResponse.
+     * @throws Error if the request fails or the response is not successful.
+     */
     sendDocument(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
@@ -140,7 +185,13 @@ class WhatsAppClient {
             return this.sendPayload(payload);
         });
     }
-    // Method to send an audio
+    /**
+     * Sends an audio message using WhatsApp.
+     *
+     * @param options - The options for the audio message.
+     * @returns A promise that resolves to a WhatsAppMessageResponse.
+     * @throws Error if the request fails or the response is not successful.
+     */
     sendAudio(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
@@ -154,7 +205,13 @@ class WhatsAppClient {
             return this.sendPayload(payload);
         });
     }
-    // Method to send a location message
+    /**
+     * Sends a location message using WhatsApp.
+     *
+     * @param options - The options for the location message.
+     * @returns A promise that resolves to a WhatsAppMessageResponse.
+     * @throws Error if the request fails or the response is not successful.
+     */
     sendLocation(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
@@ -173,7 +230,13 @@ class WhatsAppClient {
             return this.sendPayload(payload);
         });
     }
-    // Method to send an interactive message (button or list)
+    /**
+     * Sends an interactive message using WhatsApp.
+     *
+     * @param options - The options for the interactive message.
+     * @returns A promise that resolves to a WhatsAppMessageResponse.
+     * @throws Error if the request fails or the response is not successful.
+     */
     sendInteractive(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
@@ -194,7 +257,12 @@ class WhatsAppClient {
             return this.sendPayload(payload);
         });
     }
-    // Method to send a template message
+    /**
+     * Sends a template message using WhatsApp.
+     *
+     * @param options - The options for the template message.
+     * @returns A promise that resolves to a WhatsAppMessageResponse.
+     */
     sendTemplate(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
@@ -217,7 +285,12 @@ class WhatsAppClient {
             return this.sendPayload(payload);
         });
     }
-    // Method to send a sticker message
+    /**
+     * Sends a sticker message via WhatsApp.
+     *
+     * @param options - The options for sending the sticker message.
+     * @returns A promise that resolves to a WhatsAppMessageResponse object.
+     */
     sendSticker(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
@@ -231,7 +304,12 @@ class WhatsAppClient {
             return this.sendPayload(payload);
         });
     }
-    // Method to send a contact message
+    /**
+     * Method to send a contact message
+     * @param ContactMessageOptions options - The contact message options
+     * @returns The response from the WhatsApp API
+     * @throws Error if the request fails or the response is not successful
+     */
     sendContact(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
