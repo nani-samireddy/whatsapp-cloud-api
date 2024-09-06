@@ -22,7 +22,7 @@ A Node.js client library for sending WhatsApp messages using the WhatsApp Cloud 
 You can install the package using npm:
 
 ```bash
-npm install whatsapp-cloud-api
+npm install whatsapp-cloud-api-client
 ```
 
 ## Usage
