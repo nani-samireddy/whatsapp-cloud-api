@@ -2,6 +2,21 @@
 
 A Node.js client library for sending WhatsApp messages using the WhatsApp Cloud API. This package supports various types of messages, including text, media, location, interactive, template, sticker, and contact messages.
 
+### Message Types
+| Type | Description | Status |
+| --- | --- | --- |
+| Text | Send a text message | ✅ |
+| Image | Send an image | ✅ |
+| Video | Send a video | ⏳ |
+| Document | Send a document | ✅ |
+| Audio | Send an audio | ✅ |
+| Location | Send a location | ✅ |
+| Interactive | Send an interactive message | ⏳ |
+| Template | Send a template message | ⏳ |
+| Sticker | Send a sticker | ⏳ |
+| Contact | Send a contact | ⏳ |
+
+
 ## Installation
 
 You can install the package using npm:
